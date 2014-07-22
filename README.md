@@ -15,8 +15,10 @@ import org.apache.log4j.Logger;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-public class Clueweb12 extends CrawlJob {
-	public Clueweb12(String[] args){
+public class ClueBaidu extends CrawlJob {
+
+	private static final Logger log = Logger.getLogger(ClueBaidu.class);
+	public ClueBaidu(String[] args){
 		super();
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].equals("-o")) {
@@ -28,8 +30,7 @@ public class Clueweb12 extends CrawlJob {
 			}
 		}
 	}
-	private static final Logger log = Logger.getLogger(Clueweb12.class);
-
+	
 	@Override
 	String crawlContent(String url, WebClient client) {
 		try {
