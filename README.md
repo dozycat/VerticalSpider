@@ -6,47 +6,60 @@ VerticalSpider
 ## Example
 ### First crawler to :
 ```java
-package com.ecnu.ica.spiter.crawl;
+package com.ecnu.ica.spider.crawl;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.List;
 
-import org.apache.log4j.Logger;
 
+import com.ecnu.ica.spider.util.CrawlResult;
+import com.ecnu.ica.spider.util.CrawlTools;
+import com.ecnu.ica.spider.util.URL;
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+/** You can extents the CrawlJob to crawl for a page.
+** 
+**/
+public class CrawlBaiduZhidao extends CrawlJob {
 
-public class ClueBaidu extends CrawlJob {
-
-	private static final Logger log = Logger.getLogger(ClueBaidu.class);
-	public ClueBaidu(String[] args){
-		super();
-		for (int i = 0; i < args.length; i++) {
-			if (args[i].equals("-o")) {
-				this.setPath(args[i + 1]);
-			}
-			if (args[i].equals("-d")) {
-				// this.setPath(args[i + 1]);
-				this.delay_time = Integer.valueOf(args[i + 1]);
-			}
-		}
-	}
-	
 	@Override
-	String crawlContent(String url, WebClient client) {
+	public CrawlResult crawlContent(URL url, WebClient client, CrawlTools tools) {
+		String crawlUrl = url.getUrl();
+		CrawlResult result = null;
 		try {
-			HtmlPage page = client.getPage(url);
-			log.info(page.asText());
-			
-		} catch (Exception e) {
-		}
-		return null;
-	}
+			HtmlPage page = (HtmlPage) client.getPage(crawlUrl);
+			DomNode node = (DomNode) (page
+					.getByXPath("//*[@id='wgt-ask']/h1/span").get(0));
 
-	@Override
-	public ArrayList createUrl() {
-		ArrayList list = new ArrayList();
-		list.add("http://www.baidu.com");
-		return list;
+			result = new CrawlResult(null, null, null);
+			result.setMethod("String");
+
+			HashMap map = new HashMap();
+			map.put("title", node.asText());
+			
+			node=(DomNode)(page.getByXPath("//*[@class='line mt-10 q-content']").get(0));
+			map.put("Q", node.asText());
+			System.out.println(node.asXml());
+			map.put("url", url.getUrl());
+
+			result.setContent(tools.getMapToJSON().mapToJSON(map));
+
+		} catch (FailingHttpStatusCodeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 	@Override
@@ -56,6 +69,7 @@ public class ClueBaidu extends CrawlJob {
 	}
 
 }
+
 
 ```
 ### Thanks:
