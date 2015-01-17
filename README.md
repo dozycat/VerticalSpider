@@ -71,7 +71,27 @@ public class CrawlBaiduZhidao extends CrawlJob {
 }
 
 
+
 ```
+
+###Install
+```
+mvn clean install
+```
+
+###How To Use It
+Use commend line to make use of this 
+
+like below:
+```
+-t thread num
+-o outpath
+-i url_input_path
+-d delay time (ms)
+-c spider class
+java -cp spider-0.0.1-SNAPSHOT.jar com.ecnu.ica.spider.main.JobControl -c com.ecnu.ica.spider.crawl.CrawlPubchem -t 1 -i E:\test\url_.txt -o E:\test\ -d 500
+```
+
 ### Thanks:
 * **HtmlUnit**
 
