@@ -3,7 +3,7 @@ VerticalSpider
 
 #It is a web crawler for java
 
-## Example
+## Example,help u to create a spider
 ### First crawler to :
 ```java
 package com.ecnu.ica.spider.crawl;
